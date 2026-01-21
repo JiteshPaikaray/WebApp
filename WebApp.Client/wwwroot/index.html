@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebApp.Client</title>
+    <base href="/" />
+    <!-- Roboto font required by Radzen material theme -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+
+     <!--Radzen CSS (base + material theme)--> 
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/standard-base.css">
+    <link href="_content/Radzen.Blazor/css/radzen.css" rel="stylesheet" />
+    <link href="_content/Radzen.Blazor/css/material3.css" rel="stylesheet" />
+
+
+    <link rel="stylesheet" href="css/app.css" />
+     <!--If you add any scoped CSS files, uncomment the following to load them-->
+    <link href="WebApp.Client.styles.css" rel="stylesheet" /> 
+</head>
+
+<body>
+    <div id="app">
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.min.js"></script>
+</body>
+
+</html>

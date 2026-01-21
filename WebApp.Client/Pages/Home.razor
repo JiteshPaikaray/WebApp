@@ -1,0 +1,46 @@
+﻿@page "/"
+@inject NotificationService NotificationService
+
+<PageTitle>Home</PageTitle>
+
+
+
+<RadzenLayout>
+    <RadzenHeader Style="background-color:white">
+            <RadzenRow JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Gap="0">
+                <RadzenColumn Size="8" SizeSM="5">
+                    <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" Style="color:black"/>
+                    <RadzenLabel Text="Header" />
+                </RadzenColumn>
+                <RadzenColumn Size="4" SizeSM="7">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="1rem" Wrap="FlexWrap.NoWrap" class="rz-display-flex">
+                        <RadzenButton Icon="help" ButtonStyle="ButtonStyle.Primary" />
+                        <RadzenButton Icon="notifications" ButtonStyle="ButtonStyle.Secondary" />
+                        <RadzenAppearanceToggle />
+                    </RadzenStack>
+                </RadzenColumn>
+            </RadzenRow>
+    </RadzenHeader>
+    <RadzenSidebar Responsive="false" Style="width: max-content">
+        <RadzenPanelMenu DisplayStyle="@(sidebarExpanded? MenuItemDisplayStyle.IconAndText: MenuItemDisplayStyle.Icon)" ShowArrow="false">
+            <RadzenPanelMenuItem Text="Overview" Icon="home" />
+            <RadzenPanelMenuItem Text="Dashboard" Icon="dashboard" />
+            <RadzenPanelMenuItem Text="UI Fundamentals" Icon="auto_awesome">
+                <RadzenPanelMenuItem Text="Themes" Icon="color_lens" />
+                <RadzenPanelMenuItem Text="Colors" Icon="invert_colors" />
+            </RadzenPanelMenuItem>
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+    <RadzenBody>
+        <div class="rz-p-4">
+            <WebApp.CCM.Dashboard.Dashboard></WebApp.CCM.Dashboard.Dashboard>
+        </div>
+    </RadzenBody>
+    <RadzenFooter>
+        Footer
+    </RadzenFooter>
+</RadzenLayout>
+
+@code {
+    bool sidebarExpanded = true;
+}
