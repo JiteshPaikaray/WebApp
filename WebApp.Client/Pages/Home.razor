@@ -6,10 +6,10 @@
 
 
 <RadzenLayout>
-    <RadzenHeader Style="background-color:white">
+    <RadzenHeader>
             <RadzenRow JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Gap="0">
                 <RadzenColumn Size="8" SizeSM="5">
-                    <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" Style="color:black"/>
+                    <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)"/>
                     <RadzenLabel Text="Header" />
                 </RadzenColumn>
                 <RadzenColumn Size="4" SizeSM="7">
