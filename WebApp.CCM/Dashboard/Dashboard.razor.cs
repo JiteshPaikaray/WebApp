@@ -9,6 +9,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static WebApp.CCM.Dashboard.Dashboard;
+using Radzen.Blazor.Rendering;
+using Radzen;
+using Microsoft.AspNetCore.Components;
+using Radzen.Blazor;
 
 namespace WebApp.CCM.Dashboard
 {
@@ -98,8 +102,9 @@ namespace WebApp.CCM.Dashboard
 		User? mostActiveMember;
 
 		// -------------------- LIFECYCLE --------------------
-		protected override void OnInitialized()
+		protected override async Task OnInitializedAsync()
 		{
+			await base.OnInitializedAsync();
 			SeedData();
 			CalculateDerivedData();
 			FilterIssues(null);
