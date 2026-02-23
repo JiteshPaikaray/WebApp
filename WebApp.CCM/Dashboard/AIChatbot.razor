@@ -1,0 +1,126 @@
+﻿@page "/ccm/aichat"
+@using WebApp.Shared
+@using WebAPP.Services.Chatbot
+@inject IChatbotClient ChatbotClientService
+@inject NotificationService NotificationService
+
+<h3>AI Chatbot</h3>
+
+<div class="chatbot-container" style="border: 1px solid #ddd; padding: 20px; border-radius: 8px; max-width: 600px; margin: 0 auto;">
+    <div class="chat-messages" style="height: 400px; overflow-y: auto; border: 1px solid #eee; padding: 10px; margin-bottom: 15px; background-color: #f9f9f9; border-radius: 4px;">
+        @foreach (var message in ChatMessages)
+        {
+            <div style="margin-bottom: 10px; display: flex; flex-direction: column; align-items: @(message.IsUserMessage ? "flex-end" : "flex-start");">
+                <div style="max-width: 80%; padding: 10px 15px; border-radius: 8px; background-color: @(message.IsUserMessage ? "#007bff" : "#e9ecef"); color: @(message.IsUserMessage ? "white" : "black");">
+                    @message.Text
+                </div>
+                <small style="margin-top: 5px; color: #999;">@message.Timestamp.ToString("HH:mm:ss")</small>
+            </div>
+        }
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+        <input 
+            @bind="UserInput" 
+            @onkeypress="HandleKeyPress"
+            type="text" 
+            placeholder="Type your message..." 
+            class="form-control" 
+            style="flex: 1;" 
+            disabled="@IsLoading" />
+        <button 
+            @onclick="SendMessage" 
+            class="btn btn-primary" 
+            disabled="@(IsLoading || string.IsNullOrWhiteSpace(UserInput))">
+            @if (IsLoading)
+            {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <span>Sending...</span>
+            }
+            else
+            {
+                <span>Send</span>
+            }
+        </button>
+    </div>
+
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div style="margin-top: 15px; padding: 10px; background-color: #f8d7da; color: #721c24; border-radius: 4px;">
+            @ErrorMessage
+        </div>
+    }
+</div>
+
+@code {
+    private string UserInput = string.Empty;
+    private bool IsLoading = false;
+    private string? ErrorMessage;
+    private List<ChatMessage> ChatMessages = new();
+
+    private class ChatMessage
+    {
+        public string Text { get; set; } = string.Empty;
+        public bool IsUserMessage { get; set; }
+        public DateTime Timestamp { get; set; }
+    }
+
+    private async Task SendMessage()
+    {
+        if (string.IsNullOrWhiteSpace(UserInput) || IsLoading)
+            return;
+
+        try
+        {
+            IsLoading = true;
+            ErrorMessage = null;
+
+            // Add user message to chat
+            ChatMessages.Add(new ChatMessage
+            {
+                Text = UserInput,
+                IsUserMessage = true,
+                Timestamp = DateTime.Now
+            });
+
+            // Send request to backend
+            var request = new ChatbotRequest { UserMessage = UserInput };
+            var response = await ChatbotClientService.SendMessageAsync(request);
+
+            if (response.IsSuccess && !string.IsNullOrEmpty(response.BotMessage))
+            {
+                // Add bot response to chat
+                ChatMessages.Add(new ChatMessage
+                {
+                    Text = response.BotMessage,
+                    IsUserMessage = false,
+                    Timestamp = DateTime.Now
+                });
+            }
+            else
+            {
+                ErrorMessage = response.ErrorMessage ?? "Failed to get response from chatbot";
+            }
+
+            UserInput = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !IsLoading)
+        {
+            await SendMessage();
+        }
+    }
+}
+
+

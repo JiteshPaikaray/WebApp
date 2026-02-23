@@ -34,7 +34,31 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
+    <script>
+        console.log('%c🔍 Blazor Debugging Initialization', 'color: blue; font-size: 14px; font-weight: bold;');
+        console.log('Environment:', window.location.href);
+        console.log('Blazor Framework loading...');
+        
+        window.addEventListener('load', () => {
+            console.log('%c✅ Blazor App Loaded - Debugging Ready', 'color: green; font-size: 14px; font-weight: bold;');
+            console.log('Check browser DevTools (F12) → Sources tab to verify debugger connection');
+        });
+        
+        // Monitor for Blazor initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('%c📋 DOM Content Loaded', 'color: purple;');
+        });
+    </script>
     <script src="_framework/blazor.webassembly.js"></script>
+    <script>
+        window.blazorReady = new Promise((resolve) => {
+            window.addEventListener('blazor-ready', resolve);
+        });
+        
+        window.blazorReady.then(() => {
+            console.log('%c✨ Blazor Runtime Ready - Debugger Active', 'color: green; font-size: 14px; font-weight: bold;');
+        });
+    </script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.min.js"></script>
 </body>
 

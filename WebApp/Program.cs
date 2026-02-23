@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.ResponseCompression;
+using WebApp.Services.ML;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+// Add ML.NET Chatbot Service
+builder.Services.AddScoped<IChatbotMLService, ChatbotMLService>();
 
 var app = builder.Build();
 

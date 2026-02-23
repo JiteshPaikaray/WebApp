@@ -1,7 +1,13 @@
-﻿@using Microsoft.AspNetCore.Components.Routing
-@using Microsoft.AspNetCore.Components.Web
+﻿@using Microsoft.AspNetCore.Components.Routing;
+@using Microsoft.AspNetCore.Components.Web;
+@using Microsoft.AspNetCore.Components.WebAssembly.Services;
+@using System.Globalization;
+@using System.Reflection;
+@inject LazyAssemblyLoader LazyLoader
+@inject NavigationManager NavManager
 
-<Router AppAssembly="@typeof(App).Assembly">
+
+<Router AppAssembly="@typeof(App).Assembly" OnNavigateAsync="OnNavigation" AdditionalAssemblies="ModuleAssemblies">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -13,3 +19,49 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+
+@code{
+    private List<Assembly> ModuleAssemblies = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var culture = new CultureInfo("en-AU");
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        
+        // Load WebApp.CCM assembly eagerly for debugging
+        // (Lazy loading can interfere with debugger source maps)
+        try
+        {
+            var ccmAssembly = typeof(WebApp.CCM.Dashboard.AIChatbot).Assembly;
+            if (!ModuleAssemblies.Contains(ccmAssembly))
+            {
+                ModuleAssemblies.Add(ccmAssembly);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error loading CCM assembly: {ex.Message}");
+        }
+        
+        await base.OnInitializedAsync();
+    }
+    private async Task OnNavigation(NavigationContext args)
+    {
+        try
+        {
+            if (args.Path.Contains("ccm/") && ModuleAssemblies.Count == 0)
+            {
+                var ccmAssembly = typeof(WebApp.CCM.Dashboard.AIChatbot).Assembly;
+                if (!ModuleAssemblies.Contains(ccmAssembly))
+                {
+                    ModuleAssemblies.Add(ccmAssembly);
+                }
+            }
+        } 
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error in OnNavigation: {ex.Message}");
+        }
+    }
+}

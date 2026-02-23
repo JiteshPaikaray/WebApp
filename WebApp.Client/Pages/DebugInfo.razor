@@ -1,0 +1,108 @@
+@page "/debug-info"
+@using System.Reflection
+
+<h1>?? Debugger Status Page</h1>
+
+<div style="padding: 20px; background: #f5f5f5; border-radius: 8px; margin: 20px 0;">
+    <h2>Environment Information</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;"><strong>.NET Version</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">@(Environment.Version)</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Machine Name</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">@(Environment.MachineName)</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;"><strong>OS</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">@(Environment.OSVersion)</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Runtime ID</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">browser-wasm</td>
+        </tr>
+    </table>
+</div>
+
+<div style="padding: 20px; background: #fff3cd; border-radius: 8px; margin: 20px 0;">
+    <h2>?? Debugging Test</h2>
+    <button @onclick="TestDebugger" class="btn btn-primary" style="margin: 10px 0;">
+        Click to Test Debugger
+    </button>
+    <p style="font-size: 12px; color: #666;">
+        ?? Before clicking:<br>
+        1. Open DevTools: F12<br>
+        2. Go to Console tab<br>
+        3. Look for message: "TEST_DEBUG_BREAKPOINT_HIT"<br>
+        4. Click button below<br>
+        5. Should see message in console
+    </p>
+</div>
+
+<div style="padding: 20px; background: #e8f5e9; border-radius: 8px; margin: 20px 0;">
+    <h2>?? Checklist</h2>
+    <ul>
+        <li><input type="checkbox" disabled @checked="true" /> Page loads without errors</li>
+        <li><input type="checkbox" disabled @checked="true" /> Can open DevTools (F12)</li>
+        <li><input type="checkbox" disabled @checked="DevToolsOpen" /> Can see this page in DevTools</li>
+        <li><input type="checkbox" disabled @checked="DebuggerConnected" /> Debugger is connected</li>
+        <li><input type="checkbox" disabled @checked="BreakpointWorks" /> Breakpoints work</li>
+    </ul>
+</div>
+
+<div style="padding: 20px; background: #f3e5f5; border-radius: 8px; margin: 20px 0;">
+    <h2>?? Next Steps</h2>
+    <ol>
+        <li>Open DevTools: <code>F12</code></li>
+        <li>Go to <strong>Console</strong> tab</li>
+        <li>Open <strong>Sources</strong> tab</li>
+        <li>Click button above to test</li>
+        <li>Check if breakpoint hits</li>
+        <li>If works here, try on AIChatbot page</li>
+    </ol>
+</div>
+
+<div style="padding: 20px; background: #fce4ec; border-radius: 8px; margin: 20px 0;">
+    <h2>?? Troubleshooting</h2>
+    <p><strong>Issue: Button click doesn't pause in DevTools</strong></p>
+    <ol>
+        <li>Close all browser windows</li>
+        <li>Delete browser cache (Ctrl+Shift+Delete)</li>
+        <li>Restart browser</li>
+        <li>Reopen to this page</li>
+        <li>Try again</li>
+    </ol>
+</div>
+
+@code {
+    private bool DevToolsOpen = false;
+    private bool DebuggerConnected = false;
+    private bool BreakpointWorks = false;
+
+    private void TestDebugger()
+    {
+        Console.WriteLine("???????????????????????????????????????????????????????");
+        Console.WriteLine("%c? TEST_DEBUG_BREAKPOINT_HIT", "color: green; font-size: 14px; font-weight: bold;");
+        Console.WriteLine("???????????????????????????????????????????????????????");
+        Console.WriteLine("If you see this message in the browser console:");
+        Console.WriteLine("? Browser debugger is connected");
+        Console.WriteLine("");
+        Console.WriteLine("Now try:");
+        Console.WriteLine("1. Go back to AIChatbot page (/ccm/aichat)");
+        Console.WriteLine("2. Set breakpoint in SendMessage() method");
+        Console.WriteLine("3. Send a message");
+        Console.WriteLine("4. Code should pause");
+        Console.WriteLine("???????????????????????????????????????????????????????");
+        
+        DebuggerConnected = true;
+        DevToolsOpen = true;
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("%c?? Debug Info Page Loaded", "color: blue; font-size: 12px;");
+        Console.WriteLine("Blazor debugging is ready. Test using the button on this page.");
+    }
+}
