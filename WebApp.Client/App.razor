@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing;
 @using Microsoft.AspNetCore.Components.Web;
 @using Microsoft.AspNetCore.Components.WebAssembly.Services;
-@using System.Globalization;
 @using System.Reflection;
 @inject LazyAssemblyLoader LazyLoader
 @inject NavigationManager NavManager
@@ -25,9 +24,9 @@
     private List<Assembly> ModuleAssemblies = new();
     protected override async Task OnInitializedAsync()
     {
-        var culture = new CultureInfo("en-AU");
-        CultureInfo.DefaultThreadCurrentCulture = culture;
-        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        // var culture = new CultureInfo("en-AU");
+        // CultureInfo.DefaultThreadCurrentCulture = culture;
+        // CultureInfo.DefaultThreadCurrentUICulture = culture;
         
         // Load WebApp.CCM assembly eagerly for debugging
         // (Lazy loading can interfere with debugger source maps)
